@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rm-wacom2"
+version = "0.1.0"
+description = "Virtual Wayland pen tablet demos for a reMarkable desktop bridge"
+requires-python = ">=3.11"
+dependencies = ["evdev"]
+
+[project.scripts]
+rm-wacom2 = "rm_wacom2.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["rm_wacom2*"]

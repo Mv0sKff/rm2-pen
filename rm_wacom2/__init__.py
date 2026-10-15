@@ -1,0 +1,1 @@
+"""Virtual pen tablet prototype."""
