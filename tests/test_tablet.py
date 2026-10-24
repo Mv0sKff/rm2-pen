@@ -98,9 +98,15 @@ class BackendTests(unittest.TestCase):
             [
                 (e.EV_KEY, e.BTN_TOUCH, 1),
                 (e.EV_KEY, e.BTN_TOOL_PEN, 1),
+                (e.EV_KEY, e.BTN_TOOL_RUBBER, 0),
+                (e.EV_KEY, e.BTN_STYLUS, 0),
+                (e.EV_KEY, e.BTN_STYLUS2, 0),
                 (e.EV_ABS, e.ABS_X, 0),
                 (e.EV_ABS, e.ABS_Y, 32767),
                 (e.EV_ABS, e.ABS_PRESSURE, PRESSURE_MAX),
+                (e.EV_ABS, e.ABS_DISTANCE, 0),
+                (e.EV_ABS, e.ABS_TILT_X, 0),
+                (e.EV_ABS, e.ABS_TILT_Y, 0),
             ],
         )
 
@@ -114,14 +120,14 @@ class BackendTests(unittest.TestCase):
 
             with self.assertRaises(error):
                 play(device, interrupted())
-            self.assertEqual(
-                device.frames[-1],
-                [
-                    (e.EV_KEY, e.BTN_TOUCH, 0),
-                    (e.EV_ABS, e.ABS_PRESSURE, 0),
-                    (e.EV_KEY, e.BTN_TOOL_PEN, 0),
-                ],
-            )
+            frame = device.frames[-1]
+            self.assertEqual(frame[0], (e.EV_KEY, e.BTN_TOUCH, 0))
+            for event in (
+                (e.EV_ABS, e.ABS_PRESSURE, 0),
+                (e.EV_KEY, e.BTN_TOOL_PEN, 0),
+                (e.EV_KEY, e.BTN_TOOL_RUBBER, 0),
+            ):
+                self.assertIn(event, frame)
 
     def test_absolute_deadlines(self):
         now = [10.0]

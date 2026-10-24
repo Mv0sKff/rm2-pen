@@ -11,6 +11,12 @@ class PenSample:
     pressure: float
     in_proximity: bool
     touching: bool
+    tilt_x: float = 0.0
+    tilt_y: float = 0.0
+    distance: float = 0.0
+    eraser: bool = False
+    stylus: bool = False
+    stylus2: bool = False
 
     def __post_init__(self):
         if not math.isfinite(self.time_s) or self.time_s < 0:
@@ -19,6 +25,12 @@ class PenSample:
             value = getattr(self, name)
             if not math.isfinite(value) or not 0 <= value <= 1:
                 raise ValueError(f"{name} must be in [0, 1]")
+        for name in ("tilt_x", "tilt_y"):
+            value = getattr(self, name)
+            if not math.isfinite(value) or not -90 <= value <= 90:
+                raise ValueError(f"{name} must be in [-90, 90] degrees")
+        if not math.isfinite(self.distance) or not 0 <= self.distance <= 1:
+            raise ValueError("distance must be in [0, 1]")
         if self.touching and not self.in_proximity:
             raise ValueError("contact requires proximity")
         if not self.touching and self.pressure != 0:
