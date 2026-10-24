@@ -1,11 +1,13 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "rm2-pen"
 version = "0.1.0"
-description = "Virtual Wayland pen tablet demos for a reMarkable desktop bridge"
+description = "Use a reMarkable 2 as a pen tablet on Linux over SSH"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 dependencies = ["evdev"]
 
