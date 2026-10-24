@@ -6,11 +6,11 @@ if [ "$(id -u)" -ne 0 ] || [ "$#" -ne 1 ]; then
     exit 1
 fi
 id "$1" >/dev/null
-getent group rm-wacom2 >/dev/null || groupadd --system rm-wacom2
-usermod -aG rm-wacom2 "$1"
+getent group rm2-pen >/dev/null || groupadd --system rm2-pen
+usermod -aG rm2-pen "$1"
 install -d /etc/udev/rules.d /etc/modules-load.d
-printf '%s\n' 'SUBSYSTEM=="misc", KERNEL=="uinput", GROUP="rm-wacom2", MODE="0660"' > /etc/udev/rules.d/99-rm-wacom2-uinput.rules
-printf '%s\n' uinput > /etc/modules-load.d/rm-wacom2.conf
+printf '%s\n' 'SUBSYSTEM=="misc", KERNEL=="uinput", GROUP="rm2-pen", MODE="0660"' > /etc/udev/rules.d/99-rm2-pen-uinput.rules
+printf '%s\n' uinput > /etc/modules-load.d/rm2-pen.conf
 modprobe uinput
 udevadm control --reload-rules
 udevadm trigger --action=change --subsystem-match=misc --sysname-match=uinput

@@ -2,7 +2,7 @@ import unittest
 
 from evdev import ecodes as e
 
-from rm_wacom2.remarkable import (
+from rm2_pen.remarkable import (
     EVENT,
     SENSOR_X_MAX,
     SENSOR_Y_MAX,

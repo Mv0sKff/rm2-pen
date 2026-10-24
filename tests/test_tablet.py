@@ -3,8 +3,8 @@ from dataclasses import replace
 
 from evdev import ecodes as e
 
-from rm_wacom2.samples import DemoConfig, PenSample, demo_samples
-from rm_wacom2.tablet import PRESSURE_MAX, emit, play
+from rm2_pen.samples import DemoConfig, PenSample, demo_samples
+from rm2_pen.tablet import PRESSURE_MAX, emit, play
 
 
 class RecordingDevice:

@@ -6,7 +6,7 @@ from evdev import ecodes as e
 
 from .samples import PenSample
 
-NAME = "rm-wacom2 Virtual Pen"
+NAME = "rm2-pen Virtual Pen"
 X_MAX = 32767
 Y_MAX = 32767
 PRESSURE_MAX = 4095
@@ -46,7 +46,7 @@ def create_device():
         product=0x0002,
         version=1,
         bustype=e.BUS_VIRTUAL,
-        phys="rm-wacom2/pen0",
+        phys="rm2-pen/pen0",
         input_props=[e.INPUT_PROP_POINTER],
     )
 

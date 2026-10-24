@@ -38,7 +38,7 @@ def aspect(text):
 
 
 def parser():
-    root = argparse.ArgumentParser(prog="rm-wacom2")
+    root = argparse.ArgumentParser(prog="rm2-pen")
     commands = root.add_subparsers(dest="command", required=True)
     doctor = commands.add_parser("doctor")
     doctor.add_argument("--hold", type=nonnegative, default=0)
@@ -51,7 +51,7 @@ def parser():
     demo.add_argument("--aspect", type=float, default=16 / 9)
     demo.add_argument("--pressure", type=float, default=0.6)
     run = commands.add_parser("run")
-    run.add_argument("--host", default="remarkable") # e.g root@ip
+    run.add_argument("--host", default="remarkable")  # e.g root@ip
     run.add_argument("--rotate", type=int, choices=(0, 90, 180, 270), default=90)
     run.add_argument("--aspect", type=aspect, default=16 / 9)
     run.add_argument("--print", action="store_true", dest="print_only")
