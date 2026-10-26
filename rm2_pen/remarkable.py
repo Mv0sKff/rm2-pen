@@ -1,3 +1,4 @@
+import itertools
 import os
 import struct
 import subprocess
@@ -24,7 +25,7 @@ EVENT = struct.Struct("<IIHHi")
 REMOTE_COMMAND = (
     "for d in /sys/class/input/event*; do "
     'grep -qx "Wacom I2C Digitizer" "$d/device/name" && '
-    'exec cat "/dev/input/${d##*/}"; '
+    'echo "/dev/input/${d##*/}" && exec cat "/dev/input/${d##*/}"; '
     "done; echo 'digitizer not found' >&2; exit 1"
 )
 
@@ -159,6 +160,17 @@ def read_chunks(stream) -> Iterator[bytes]:
         yield chunk
 
 
+def split_header(chunks: Iterator[bytes]) -> tuple[str | None, Iterator[bytes]]:
+    """Separates the first line from the chunks; None if the stream ended first."""
+    buffer = b""
+    for chunk in chunks:
+        buffer += chunk
+        if b"\n" in buffer:
+            line, _, rest = buffer.partition(b"\n")
+            return line.decode(errors="replace"), itertools.chain([rest], chunks)
+    return None, iter(())
+
+
 def ssh_command(host: str) -> list[str]:
     return [
         "ssh",
@@ -184,8 +196,11 @@ def stream(host: str, mapping: Mapping, *, retry_s: float = 2.0) -> Iterator[Pen
         ) as process:
             print(f"Connecting to {host}.", flush=True)
             try:
+                node, chunks = split_header(read_chunks(process.stdout))
+                if node is not None:
+                    print(f"Connected to {host}: {node}", flush=True)
                 last = None
-                for last in decode(read_chunks(process.stdout), mapping):
+                for last in decode(chunks, mapping):
                     yield last
                 # Lift the pen if the connection dropped mid-stroke.
                 if last is not None and last.in_proximity:
